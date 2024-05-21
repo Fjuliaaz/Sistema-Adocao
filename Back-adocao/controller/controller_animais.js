@@ -23,3 +23,7 @@ const getAnimais = async function(){
         
     }
 }
+
+module.export = {
+   getAnimais
+}
