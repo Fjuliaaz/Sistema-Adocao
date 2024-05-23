@@ -35,4 +35,21 @@ app.get('/v1/petShop/selectAnimais', cors(), async(request,response,next) => {  
     }
 }) 
 
+app.post('/v1/petShop/postAnimais', cors(), bodyParserJson, async function (request, response,next ){
+
+    // Api reebe o content-tye (API DEVE RECEBER SOMENTE application/json)
+        let contentType = request.headers['content-type'];
+        
+    
+        // recebe o que chegar no corpo da requisição e guardar nessa variável local
+        let dadosBody = request.body;
+        // encaminha os dados para a controller enviar para o DAO
+        let resultDadosNovoAnimal = await controllerAnimais.setInserirNovoAnimal(dadosBody, contentType);
+    
+    
+        response.status(resultDadosNovoAnimal.status_code);
+        response.json(resultDadosNovoAnimal);
+    
+    } )
+
 console.log('API funcinando e aguardando requisições')

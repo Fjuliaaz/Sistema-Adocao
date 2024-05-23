@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,41 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model tbl_animais {
+  id    Int     @id @default(autoincrement())
+  nome  String? @db.VarChar(50)
+  raca  String  @db.VarChar(100)
+  idade Int?
+  setor String  @db.VarChar(20)
+}
+
+model tbl_cadastro {
+  id       Int     @id @default(autoincrement())
+  nome     String  @db.VarChar(100)
+  email    String? @db.VarChar(100)
+  endereco String  @db.VarChar(100)
+  telefone BigInt
+  cpf      BigInt
+  rg       BigInt
+}
+
+model tbl_formulario_adocao {
+  id                  Int     @id @default(autoincrement())
+  raca_de_preferencia String  @db.VarChar(100)
+  porte               String? @db.VarChar(25)
+  idade_minima        Int
+  resgatado_ou_nao    String? @db.VarChar(3)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model tbl_racas {
+  descricao                 String? @db.VarChar(45)
+  expectativa_de_vida       Int?
+  cor                       String? @db.VarChar(30)
+  popularidade              Int?
+  problemas_de_saude_comuns String? @db.VarChar(50)
+
+  @@ignore
 }
