@@ -42,7 +42,7 @@ const setInserirNovoAnimal = async (dadosAnimais, contentType) => {
 
             } else {
 
-                //Validação para verificar se a data de relancameno tem um conteúdo válido
+                //Validação para verificar se nome e idade tem um conteúdo válido
 
                 if (dadosAnimais.nome != '' &&
                     dadosAnimais.nome != null &&
@@ -61,7 +61,7 @@ const setInserirNovoAnimal = async (dadosAnimais, contentType) => {
                     }
 
                 } else {
-                    statusValidated = true  //validação para liberar a inserção dos dados no DAO
+                    statusValidated = true  
                 }
 
                 //se a variável for verdadeira, podemos encaminhar os dados para o DAO
@@ -104,7 +104,72 @@ const setInserirNovoAnimal = async (dadosAnimais, contentType) => {
 
 }
 
+const setAtualizarNovoAnimal = async function (idAnimais, dadosAnimaisUpdate, content) {
+    if (String(content).toLowerCase() == 'application/json') {
+        
+        let updateAnimaisJson = {}
+        try {
+            const validaId = await animaisDAO.selectAnimaisById(idAnimais)
+            
+            if (validaId) {
+                const AnimalAtualizado = await animaisDAO.updateAnimais(idAnimais, dadosAnimaisUpdate)
+                
+                if (AnimalAtualizado) {
+                    updateAnimaisJson.id = validaId
+                    updateAnimaisJson.status = message.SUCESS_UPTADE_ITEM.status
+                    updateAnimaisJson.status_code = message.SUCESS_UPTADE_ITEM.status_code
+                    updateAnimaisJson.message = message.SUCESS_UPTADE_ITEM.message
+                    updateAnimaisJson.animais = AnimalAtualizado
+
+                    console.log(updateAnimaisJson);
+
+                    return updateAnimaisJson
+                } else {
+                    return message.ERROR_INTERNAL_SERVER_DB
+                }
+            } else {
+                return message.ERROR_NOT_FOUND
+            }
+
+        } catch (error) {
+            return message.ERROR_UPDATED_ITEM
+        }
+    } else {
+        return message.ERROR_CONTENT_TYPE
+    }
+}
+
+const setExcluirAnimais = async function (id) {
+    let deleteAnimaisJson ={}
+    
+    try {
+        const validaId = await animaisDAO.selectAnimaisById(id)
+        
+        if (validaId) {
+            const apagarAnimais = await animaisDAO.deleteAnimais(id)
+            
+            if (apagarAnimais) {
+                deleteAnimaisJson.status = message.SUCESS_DELETE_ITEM.status
+                deleteAnimaisJson.status_code = message.SUCESS_DELETE_ITEM.status_code
+                deleteAnimaisJson.message = message.SUCESS_DELETE_ITEM.message
+                deleteAnimaisJson.id = validaId
+
+                return deleteAnimaisJson
+            } else {
+                return message.ERROR_INTERNAL_SERVER_DB
+            }
+        } else {
+            return message.ERROR_NOT_FOUND
+        }
+
+    } catch (error) {
+        return message.ERROR_UPDATED_ITEM
+    }
+}
+
 module.exports = {
     getAnimais,
-    setInserirNovoAnimal
+    setInserirNovoAnimal,
+    setAtualizarNovoAnimal,
+    setExcluirAnimais
 }

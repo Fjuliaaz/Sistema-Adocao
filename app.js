@@ -49,5 +49,29 @@ app.post('/v1/petShop/postAnimais', cors(), bodyParserJson, async function (requ
     
     } )
 
+app.put('/v1/petShop/updateAnimais/:id', cors(), bodyParserJson, async function (request, response, next) {
+
+        let idAnimais = request.params.id
+        let contentType = request.headers['content-type']
+        let dadosAnimaisUpdate = request.body
+    
+        let resultDados = await controllerAnimais.setAtualizarNovoAnimal(idAnimais, dadosAnimaisUpdate, contentType)
+    
+        console.log(idAnimais, dadosAnimaisUpdate,resultDados);
+        response.status(resultDados.status_code)
+        response.json(resultDados)
+ })
+
+ app.delete('/v1/petShop/deleteAnimais/:id', cors(), bodyParserJson, async function (request, response, next) {
+
+    let idAnimais = request.params.id
+
+    let resultDados = await controllerAnimais.setExcluirAnimais(idAnimais)
+
+    response.status(resultDados.status_code)
+    response.json(resultDados)
+})
+
 console.log('API funcinando e aguardando requisições')
 app.listen(8080, () => {})
+
