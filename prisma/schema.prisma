@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model tbl_animais {
+  id    Int     @id @default(autoincrement())
+  nome  String? @db.VarChar(50)
+  raca  String  @db.VarChar(100)
+  idade Int?
+  setor String  @db.VarChar(20)
+}
+
+model tbl_cadastro {
+  id       Int     @id @default(autoincrement())
+  nome     String  @db.VarChar(100)
+  email    String? @db.VarChar(100)
+  endereco String  @db.VarChar(100)
+  telefone BigInt
+  cpf      BigInt
+  rg       BigInt
+}
+
+model tbl_formulario_adocao {
+  nome_usuario        String? @db.VarChar(100)
+  id                  Int     @id @default(autoincrement())
+  raca_de_preferencia String  @db.VarChar(100)
+  porte               String? @db.VarChar(25)
+  idade_minima        Int
+  resgatado_ou_nao    String? @db.VarChar(3)
+}
+
+model tbl_racas {
+  id                        Int     @id @default(autoincrement())
+  nome                      String? @db.VarChar(45)
+  descricao                 String? @db.VarChar(250)
+  expectativa_de_vida       String? @db.VarChar(50)
+  cor                       String? @db.VarChar(30)
+  popularidade              String? @db.VarChar(50)
+  problemas_de_saude_comuns String? @db.VarChar(50)
+}
